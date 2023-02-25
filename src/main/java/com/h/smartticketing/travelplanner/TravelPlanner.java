@@ -18,8 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 final class TravelPlanner {
-	final RoutingService routingService;
-
+	
 	@Builder
 	@ToString
 	static class TravelPlannerRequest {
@@ -30,6 +29,8 @@ final class TravelPlanner {
 		private final String mode;
 	}
 
+	final RoutingService routingService;
+	
 	TripPlannerResponse plan(TravelPlannerRequest travelPlannerRequest) {
 
 		log.info("Receives request={} ", travelPlannerRequest);
