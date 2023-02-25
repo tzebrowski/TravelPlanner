@@ -1,4 +1,4 @@
-package com.h.smartticketing.travelplanner;
+package com.h.smartticketing.travelplanner.otp;
 
 import static org.opentripplanner.standalone.configure.ConstructApplication.creatTransitLayerForRaptor;
 
