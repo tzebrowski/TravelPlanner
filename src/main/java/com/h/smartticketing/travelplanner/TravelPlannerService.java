@@ -24,8 +24,9 @@ public class TravelPlannerService {
 		final RoutingService routingService = new DefaultRoutingService(serverRequestContext);
 		
 		port(4343);
-		
-		final TravelPlannerController routesController = new TravelPlannerController();
-		routesController.registerAPI(routingService);		
+
+		final TravelPlanner travelPlanner = new TravelPlanner(routingService);
+		final TravelPlannerController travelPlannerController = new TravelPlannerController(travelPlanner);
+		travelPlannerController.start();
 	}
 }
