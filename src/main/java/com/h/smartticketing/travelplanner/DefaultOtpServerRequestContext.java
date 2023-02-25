@@ -42,6 +42,4 @@ final class DefaultOtpServerRequestContext {
 		creatTransitLayerForRaptor(transitModel, routerConfig.transitTuningConfig());
 		return context;
 	}
-
-
 }

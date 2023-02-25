@@ -2,11 +2,11 @@ package com.h.smartticketing.travelplanner;
 
 import static spark.Spark.get;
 
-import org.opentripplanner.api.parameter.QualifiedModeSet;
 import org.opentripplanner.api.resource.TripPlannerResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.h.smartticketing.travelplanner.TravelPlanner.TravelPlannerRequest;
 
 final class TravelPlannerController {
 
@@ -16,7 +16,7 @@ final class TravelPlannerController {
 	TravelPlannerController(final TravelPlanner travelPlanner) {
 		this.objectMapper = new ObjectMapper();
 		this.travelPlanner = travelPlanner;
-		
+
 		objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 		objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 	}
@@ -30,11 +30,13 @@ final class TravelPlannerController {
 			final double toLat = Double.parseDouble(req.queryParams("toLat"));
 			final double toLong = Double.parseDouble(req.queryParams("toLong"));
 
-			final QualifiedModeSet mode = new QualifiedModeSet(req.queryParams("mode"));
+			final String mode = req.queryParams("mode");
 
-			final TripPlannerResponse tripPlannerResponse = travelPlanner.plan(fromLat, fromLong, toLat, toLong, mode);
+			final TravelPlannerRequest plannerRequest = TravelPlannerRequest.builder().fromLat(fromLat)
+					.fromLong(fromLong).toLat(toLat).toLong(toLong).mode(mode).build();
+
+			final TripPlannerResponse tripPlannerResponse = travelPlanner.plan(plannerRequest);
 			return objectMapper.writeValueAsString(tripPlannerResponse);
-
 		});
 	}
 }

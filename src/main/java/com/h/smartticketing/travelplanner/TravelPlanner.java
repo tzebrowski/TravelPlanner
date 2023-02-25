@@ -10,7 +10,9 @@ import org.opentripplanner.routing.api.request.RouteRequest;
 import org.opentripplanner.routing.api.request.request.JourneyRequest;
 import org.opentripplanner.routing.api.response.RoutingResponse;
 
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -18,21 +20,30 @@ import lombok.extern.slf4j.Slf4j;
 final class TravelPlanner {
 	final RoutingService routingService;
 
-	TripPlannerResponse plan(final double fromLat, final double fromLong, final double toLat,
-			final double toLong, final QualifiedModeSet mode) {
-		
-		log.info("Receives request,mode={}, fromLat={}, fromLong={}, toLat={}, toLong={} ", mode, fromLat, fromLong,
-				toLat, toLong);
+	@Builder
+	@ToString
+	static class TravelPlannerRequest {
+		private final double fromLat;
+		private final double fromLong;
+		private final double toLat;
+		private final double toLong;
+		private final String mode;
+	}
+
+	TripPlannerResponse plan(TravelPlannerRequest travelPlannerRequest) {
+
+		log.info("Receives request={} ", travelPlannerRequest);
 
 		long time = System.currentTimeMillis();
 
 		final RouteRequest request = new RouteRequest();
 
-		request.setFrom(new GenericLocation(fromLat, fromLong));
-		request.setTo(new GenericLocation(toLat, toLong));
+		request.setFrom(new GenericLocation(travelPlannerRequest.fromLat, travelPlannerRequest.fromLong));
+		request.setTo(new GenericLocation(travelPlannerRequest.toLat, travelPlannerRequest.toLong));
 
 		final JourneyRequest journey = new JourneyRequest();
-		journey.setModes(mode.getRequestModes());
+		final QualifiedModeSet qualifiedModeSet = new QualifiedModeSet(travelPlannerRequest.mode);
+		journey.setModes(qualifiedModeSet.getRequestModes());
 		request.setJourney(journey);
 
 		final RoutingResponse route = routingService.route(request);
