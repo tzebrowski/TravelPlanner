@@ -7,16 +7,19 @@ import org.opentripplanner.routing.api.RoutingService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.h.smartticketing.travelplanner.otp.RoutingServiceFactory;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 public class TravelPlannerService {
-	static final String GRAPH_FILE = "src/main/resources/berlin.obj";
+	
 	
 	public static void main(String[] args) throws JsonProcessingException {
 		startService();
 	}
 
 	private static void startService() {
+		final String graphFilePath = Dotenv.load().get("GRAPH_FILE_PATH");
 		
-		final RoutingService routingService = RoutingServiceFactory.get(GRAPH_FILE);
+		final RoutingService routingService = RoutingServiceFactory.get(graphFilePath);
 		
 		port(4343);
 
@@ -24,6 +27,4 @@ public class TravelPlannerService {
 		final TravelPlannerController travelPlannerController = new TravelPlannerController(travelPlanner);
 		travelPlannerController.start();
 	}
-
-
 }

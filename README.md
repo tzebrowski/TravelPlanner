@@ -2,7 +2,8 @@
  
 This project contains simple API server which expose just single operation `/api/v1/routes/plan` for planning the travel for given gps coordinates using different transportation modes.
 Under the hood, `OpenTripPlanner` is used.
-In order to use the project, you need to provide pre-compiled graph object.  
+
+In order to use the project, you need to provide pre-compiled graph object, more here: https://docs.opentripplanner.org/en/v2.2.0/Container-Image/
  
 Example usage
 

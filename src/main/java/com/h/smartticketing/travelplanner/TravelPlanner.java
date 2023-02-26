@@ -1,6 +1,8 @@
 package com.h.smartticketing.travelplanner;
 
+import org.opentripplanner.api.mapping.PlannerErrorMapper;
 import org.opentripplanner.api.mapping.TripPlanMapper;
+import org.opentripplanner.api.mapping.TripSearchMetadataMapper;
 import org.opentripplanner.api.model.ApiTripPlan;
 import org.opentripplanner.api.parameter.QualifiedModeSet;
 import org.opentripplanner.api.resource.TripPlannerResponse;
@@ -18,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 final class TravelPlanner {
-	
+
 	@Builder
 	@ToString
 	static class TravelPlannerRequest {
@@ -30,7 +32,7 @@ final class TravelPlanner {
 	}
 
 	final RoutingService routingService;
-	
+
 	TripPlannerResponse plan(TravelPlannerRequest travelPlannerRequest) {
 
 		log.info("Receives request={} ", travelPlannerRequest);
@@ -47,12 +49,18 @@ final class TravelPlanner {
 		journey.setModes(qualifiedModeSet.getRequestModes());
 		request.setJourney(journey);
 
-		final RoutingResponse route = routingService.route(request);
+		final RoutingResponse routeResponse = routingService.route(request);
 		final TripPlanMapper tripPlanMapper = new TripPlanMapper(request.locale(), true);
-		final ApiTripPlan mapTripPlan = tripPlanMapper.mapTripPlan(route.getTripPlan());
+		final ApiTripPlan mapTripPlan = tripPlanMapper.mapTripPlan(routeResponse.getTripPlan());
 
 		final TripPlannerResponse tripPlannerResponse = new TripPlannerResponse(null);
 		tripPlannerResponse.setPlan(mapTripPlan);
+
+		tripPlannerResponse.setMetadata(TripSearchMetadataMapper.mapTripSearchMetadata(routeResponse.getMetadata()));
+		if (!routeResponse.getRoutingErrors().isEmpty()) {
+			tripPlannerResponse.setError(PlannerErrorMapper.mapMessage(routeResponse.getRoutingErrors().get(0)));
+		}
+
 		time = System.currentTimeMillis() - time;
 		log.info("Request processing time: {}", time);
 		return tripPlannerResponse;

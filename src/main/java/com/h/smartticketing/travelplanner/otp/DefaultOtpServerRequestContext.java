@@ -15,7 +15,9 @@ import org.opentripplanner.transit.service.StopModel;
 import org.opentripplanner.transit.service.TransitModel;
 
 import io.micrometer.core.instrument.Metrics;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 final class DefaultOtpServerRequestContext {
 
 	static OtpServerRequestContext createServerContext(SerializedGraphObject serializedGraphObject) {
@@ -27,7 +29,10 @@ final class DefaultOtpServerRequestContext {
 		final Graph graph = serializedGraphObject.graph;
 		graph.index(new StopModel());
 
-		final DefaultServerRequestContext context = DefaultServerRequestContext.create(routerConfig.transitTuningConfig(),
+		log.info("vertices size={}",graph.getVertices().size());
+		
+		final DefaultServerRequestContext context = DefaultServerRequestContext.create(
+				routerConfig.transitTuningConfig(),
 				routerConfig.routingRequestDefaults(), 
 				routerConfig.streetRoutingTimeout(),
 				new RaptorConfig<>(routerConfig.transitTuningConfig()), 

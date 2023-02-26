@@ -8,8 +8,8 @@ import com.h.smartticketing.travelplanner.TravelPlanner.TravelPlannerRequest;
 
 final class TravelPlannerController {
 	
-	final TravelPlanner travelPlanner;
-	final JsonSerializer jsonSerializer = new JsonSerializer();
+	private final TravelPlanner travelPlanner;
+	private final JsonSerializer jsonSerializer = new JsonSerializer();
 
 	TravelPlannerController(final TravelPlanner travelPlanner) {
 		this.travelPlanner = travelPlanner;
