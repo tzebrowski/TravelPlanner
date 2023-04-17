@@ -4,8 +4,12 @@ import static spark.Spark.get;
 
 import org.opentripplanner.api.resource.TripPlannerResponse;
 
+import com.esotericsoftware.minlog.Log;
 import com.h.smartticketing.travelplanner.TravelPlanner.TravelPlannerRequest;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 final class TravelPlannerController {
 	
 	private final TravelPlanner travelPlanner;
@@ -32,7 +36,9 @@ final class TravelPlannerController {
 					.toLat(toLat)
 					.toLong(toLong)
 					.mode(mode).build();
-
+			
+			log.info("{}",plannerRequest);
+			
 			final TripPlannerResponse tripPlannerResponse = travelPlanner.plan(plannerRequest);
 			return jsonSerializer.serialize(tripPlannerResponse);
 		});
