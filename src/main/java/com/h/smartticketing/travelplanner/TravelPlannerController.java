@@ -4,7 +4,6 @@ import static spark.Spark.get;
 
 import org.opentripplanner.api.resource.TripPlannerResponse;
 
-import com.esotericsoftware.minlog.Log;
 import com.h.smartticketing.travelplanner.TravelPlanner.TravelPlannerRequest;
 
 import lombok.extern.slf4j.Slf4j;

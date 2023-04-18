@@ -21,6 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 final class TravelPlanner {
 
+	private static final int MaxNumItineraries = 5;
+
 	@Builder
 	@ToString
 	static class TravelPlannerRequest {
@@ -48,7 +50,9 @@ final class TravelPlanner {
 		final QualifiedModeSet qualifiedModeSet = new QualifiedModeSet(travelPlannerRequest.mode);
 		journey.setModes(qualifiedModeSet.getRequestModes());
 		request.setJourney(journey);
-
+		request.setNumItineraries(MaxNumItineraries);
+		
+		
 		final RoutingResponse routeResponse = routingService.route(request);
 		final TripPlanMapper tripPlanMapper = new TripPlanMapper(request.locale(), true);
 		final ApiTripPlan mapTripPlan = tripPlanMapper.mapTripPlan(routeResponse.getTripPlan());

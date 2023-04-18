@@ -27,6 +27,7 @@ final class DefaultOtpServerRequestContext {
 		final RouterConfig routerConfig = serializedGraphObject.routerConfig;
 
 		final Graph graph = serializedGraphObject.graph;
+		graph.setFareService(new CustomFareCalculationService(graph.getFareService()));
 		graph.index(new StopModel());
 
 		log.info("vertices size={}",graph.getVertices().size());
