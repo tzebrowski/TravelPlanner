@@ -11,20 +11,21 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 public class TravelPlannerService {
 	
-	
 	public static void main(String[] args) throws JsonProcessingException {
 		startService();
 	}
 
 	private static void startService() {
-		final String graphFilePath = Dotenv.load().get("GRAPH_FILE_PATH");
+		final String graphFilePath_1 = Dotenv.load().get("GRAPH_FILE_PATH");
+		final String graphFilePath_2 = Dotenv.load().get("GRAPH_FILE_PATH");
 		
-		final RoutingService routingService = RoutingServiceFactory.get(graphFilePath);
+		final RoutingService routingService_1 = RoutingServiceFactory.get(graphFilePath_1);
+		final RoutingService routingService_2 = RoutingServiceFactory.get(graphFilePath_2);
+		
+		final TravelPlannerController travelPlannerController = new TravelPlannerController(new TravelPlanner(routingService_1),new TravelPlanner(routingService_2));
 		
 		port(4343);
-
-		final TravelPlanner travelPlanner = new TravelPlanner(routingService);
-		final TravelPlannerController travelPlannerController = new TravelPlannerController(travelPlanner);
+		
 		travelPlannerController.start();
 	}
 }
