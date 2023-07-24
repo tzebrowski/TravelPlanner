@@ -61,9 +61,8 @@ final class TravelPlanner {
 		request.setNumItineraries(MaxNumItineraries);
 		request.setLocale(Locale.ENGLISH);
 		request.setArriveBy(false);
-		var filterBuilder = TransitFilterRequest.of();
 		
-		applyTransitModeFilter(journey, modes, filterBuilder);
+		applyTransitModeFilter(journey, modes);
 		
 		log.info("OTP Request={}", request);
 
@@ -80,12 +79,14 @@ final class TravelPlanner {
 		}
 
 		time = System.currentTimeMillis() - time;
-		log.info("Request processing time: {}", time);
+		log.info("OTP Request processing time: {}", time);
 		return tripPlannerResponse;
 	}
 
-	private void applyTransitModeFilter(final JourneyRequest journey, final QualifiedModeSet modes,
-			org.opentripplanner.routing.api.request.request.filter.TransitFilterRequest.Builder filterBuilder) {
+	private void applyTransitModeFilter(final JourneyRequest journey, final QualifiedModeSet modes) {
+		
+		var filterBuilder = TransitFilterRequest.of();
+		
 		List<MainAndSubMode> tModes;
 		if (modes == null) {
 			tModes = MainAndSubMode.all();
@@ -108,5 +109,6 @@ final class TravelPlanner {
 		} else {
 			transit.setFilters(List.of(filterBuilder.build()));
 		}
+		
 	}
 }
