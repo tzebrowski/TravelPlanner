@@ -17,8 +17,7 @@ final class CustomFareCalculationService implements FareService {
 		final ItineraryFares originalItineraryFares = fareService.getCost(itinerary);
 		
 		final ItineraryFares copyitineraryFares = new ItineraryFares(originalItineraryFares);
-		log.info("{}",itinerary);
-		
+		log.trace("{}",itinerary);
 		return copyitineraryFares;
 	}
 }
